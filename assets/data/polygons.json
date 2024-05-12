@@ -1,0 +1,471 @@
+{
+  "triangle": {
+    "properties": {
+      "polygon": {
+        "..obj": "polygon",
+        "..required": true
+      },
+      "heights": {
+        "..obj": "list",
+        "type": "segment",
+        "..required": false
+      },
+      "medians": {
+        "..obj": "list",
+        "type": "segment",
+        "..required": false
+      },
+      "bisectors": {
+        "..obj": "list",
+        "type": "segment",
+        "..required": false
+      }
+    },
+    "parse": [
+      {
+        "operation": "set",
+        "key": "$polygon",
+        "value": "polygon(#0-2#)"
+      }
+    ],
+    "problemUI": [
+      {
+        "ui": [
+          "'△'",
+          "$a:letter",
+          "$b:letter",
+          "$c:letter"
+        ],
+        "parse": [
+          "$a",
+          "$b",
+          "$c",
+          "'=triangle'"
+        ]
+      }
+    ],
+    "checks": [
+      {
+        "operation": "listProperties",
+        "list": "$polygon.[0].dots",
+        "length": 3
+      },
+      {
+        "operation": "_triangleSameness"
+      }
+    ],
+    "consequences": [
+      {
+        "operation": "math",
+        "id": 3,
+        "text": [
+          "'В △'",
+          "_id.polygon.[0].dots.[0].[0].letter",
+          "_id.polygon.[0].dots.[1].[0].letter",
+          "_id.polygon.[0].dots.[2].[0].letter",
+          "' сумма углов равна 180°: ∠'",
+          "$polygon.[0].angles.[0].[0].ray1.[0].continueDot.[0].letter",
+          "$polygon.[0].angles.[0].[0].ray1.[0].startDot.[0].letter",
+          "$polygon.[0].angles.[0].[0].ray2.[0].continueDot.[0].letter",
+          "' = 180° - ∠'",
+          "$polygon.[0].angles.[1].[0].ray1.[0].continueDot.[0].letter",
+          "$polygon.[0].angles.[1].[0].ray1.[0].startDot.[0].letter",
+          "$polygon.[0].angles.[1].[0].ray2.[0].continueDot.[0].letter",
+          "' - ∠'",
+          "$polygon.[0].angles.[2].[0].ray1.[0].continueDot.[0].letter",
+          "$polygon.[0].angles.[2].[0].ray1.[0].startDot.[0].letter",
+          "$polygon.[0].angles.[2].[0].ray2.[0].continueDot.[0].letter",
+          "' = 180° - '",
+          "$polygon.[0].angles.[1].[0].degrees",
+          "'° - '",
+          "$polygon.[0].angles.[2].[0].degrees",
+          "'° = '",
+          "$polygon.[0].angles.[0].[0].degrees",
+          "'°'"
+        ],
+        "dependents": ["$polygon.[0].angles.[0]"],
+        "dependencies": ["$polygon.[0].angles.[1]", "$polygon.[0].angles.[2]"],
+        "math": {
+          "operation": "equals",
+          "value1": {
+            "operation": "num",
+            "value": "$polygon.[0].angles.[0].degrees"
+          },
+          "value2": {
+            "operation": "diff",
+            "value1": {
+              "operation": "exactNum",
+              "value": "180.0"
+            },
+            "value2": {
+              "operation": "sum",
+              "value1": {
+                "operation": "num",
+                "value": "$polygon.[0].angles.[1].degrees"
+              },
+              "value2": {
+                "operation": "num",
+                "value": "$polygon.[0].angles.[2].degrees"
+              }
+            }
+          }
+        }
+      },
+      {
+        "operation": "math",
+        "id": 3,
+        "text": [
+          "'В △'",
+          "_id.polygon.[0].dots.[0].[0].letter",
+          "_id.polygon.[0].dots.[1].[0].letter",
+          "_id.polygon.[0].dots.[2].[0].letter",
+          "' сумма углов равна 180°: ∠'",
+          "$polygon.[0].angles.[1].[0].ray1.[0].continueDot.[0].letter",
+          "$polygon.[0].angles.[1].[0].ray1.[0].startDot.[0].letter",
+          "$polygon.[0].angles.[1].[0].ray2.[0].continueDot.[0].letter",
+          "' = 180° - ∠'",
+          "$polygon.[0].angles.[2].[0].ray1.[0].continueDot.[0].letter",
+          "$polygon.[0].angles.[2].[0].ray1.[0].startDot.[0].letter",
+          "$polygon.[0].angles.[2].[0].ray2.[0].continueDot.[0].letter",
+          "' - ∠'",
+          "$polygon.[0].angles.[0].[0].ray1.[0].continueDot.[0].letter",
+          "$polygon.[0].angles.[0].[0].ray1.[0].startDot.[0].letter",
+          "$polygon.[0].angles.[0].[0].ray2.[0].continueDot.[0].letter",
+          "' = 180° - '",
+          "$polygon.[0].angles.[2].[0].degrees",
+          "'° - '",
+          "$polygon.[0].angles.[0].[0].degrees",
+          "'° = '",
+          "$polygon.[0].angles.[1].[0].degrees",
+          "'°'"
+        ],
+        "dependents": ["$polygon.[0].angles.[1]"],
+        "dependencies": ["$polygon.[0].angles.[2]", "$polygon.[0].angles.[0]"],
+        "math": {
+          "operation": "equals",
+          "value1": {
+            "operation": "num",
+            "value": "$polygon.[0].angles.[1].degrees"
+          },
+          "value2": {
+            "operation": "diff",
+            "value1": {
+              "operation": "exactNum",
+              "value": "180.0"
+            },
+            "value2": {
+              "operation": "sum",
+              "value1": {
+                "operation": "num",
+                "value": "$polygon.[0].angles.[0].degrees"
+              },
+              "value2": {
+                "operation": "num",
+                "value": "$polygon.[0].angles.[2].degrees"
+              }
+            }
+          }
+        }
+      },
+      {
+        "operation": "math",
+        "id": 3,
+        "text": [
+          "'В △'",
+          "_id.polygon.[0].dots.[0].[0].letter",
+          "_id.polygon.[0].dots.[1].[0].letter",
+          "_id.polygon.[0].dots.[2].[0].letter",
+          "' сумма углов равна 180°: ∠'",
+          "$polygon.[0].angles.[2].[0].ray1.[0].continueDot.[0].letter",
+          "$polygon.[0].angles.[2].[0].ray1.[0].startDot.[0].letter",
+          "$polygon.[0].angles.[2].[0].ray2.[0].continueDot.[0].letter",
+          "' = 180° - ∠'",
+          "$polygon.[0].angles.[0].[0].ray1.[0].continueDot.[0].letter",
+          "$polygon.[0].angles.[0].[0].ray1.[0].startDot.[0].letter",
+          "$polygon.[0].angles.[0].[0].ray2.[0].continueDot.[0].letter",
+          "' - ∠'",
+          "$polygon.[0].angles.[1].[0].ray1.[0].continueDot.[0].letter",
+          "$polygon.[0].angles.[1].[0].ray1.[0].startDot.[0].letter",
+          "$polygon.[0].angles.[1].[0].ray2.[0].continueDot.[0].letter",
+          "' = 180° - '",
+          "$polygon.[0].angles.[0].[0].degrees",
+          "'° - '",
+          "$polygon.[0].angles.[1].[0].degrees",
+          "'° = '",
+          "$polygon.[0].angles.[2].[0].degrees",
+          "'°'"
+        ],
+        "dependents": ["$polygon.[0].angles.[2]"],
+        "dependencies": ["$polygon.[0].angles.[1]", "$polygon.[0].angles.[0]"],
+        "math": {
+          "operation": "equals",
+          "value1": {
+            "operation": "num",
+            "value": "$polygon.[0].angles.[2].degrees"
+          },
+          "value2": {
+            "operation": "diff",
+            "value1": {
+              "operation": "exactNum",
+              "value": "180.0"
+            },
+            "value2": {
+              "operation": "sum",
+              "value1": {
+                "operation": "num",
+                "value": "$polygon.[0].angles.[1].degrees"
+              },
+              "value2": {
+                "operation": "num",
+                "value": "$polygon.[0].angles.[0].degrees"
+              }
+            }
+          }
+        }
+      },
+      {
+        "operation": "_triangleCharacteristics"
+      },
+      {
+        "operation": "math",
+        "id": 4,
+        "dependents": ["$polygon.[0].segments.[0]"],
+        "dependencies": ["$polygon.[0].segments.[1]", "$polygon.[0].segments.[2]", "$polygon.[0].angles.[1]"],
+        "math": {
+          "operation": "equals",
+          "value1": {
+            "operation": "num",
+            "value": "$polygon.[0].segments.[0].length"
+          },
+          "value2": {
+            "operation": "squareRoot",
+            "value": {
+              "operation": "diff",
+              "value1": {
+                "operation": "sum",
+                "value1": {
+                  "operation": "squared",
+                  "value": {
+                    "operation": "num",
+                    "value": "$polygon.[0].segments.[1].length"
+                  }
+                },
+                "value2": {
+                  "operation": "squared",
+                  "value": {
+                    "operation": "num",
+                    "value": "$polygon.[0].segments.[2].length"
+                  }
+                }
+              },
+              "value2": {
+                "operation": "times",
+                "value1": {
+                  "operation": "exactNum",
+                  "value": "2"
+                },
+                "value2": {
+                  "operation": "times",
+                  "value1": {
+                    "operation": "num",
+                    "value": "$polygon.[0].segments.[1].length"
+                  },
+                  "value2": {
+                    "operation": "times",
+                    "value1": {
+                      "operation": "num",
+                      "value": "$polygon.[0].segments.[2].length"
+                    },
+                    "value2": {
+                      "operation": "cosine",
+                      "value": {
+                        "operation": "num",
+                        "value": "$polygon.[0].angles.[1].degrees"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "operation": "math",
+        "id": 4,
+        "dependents": ["$polygon.[0].segments.[1]"],
+        "dependencies": ["$polygon.[0].segments.[0]", "$polygon.[0].segments.[2]", "$polygon.[0].angles.[2]"],
+        "math": {
+          "operation": "equals",
+          "value1": {
+            "operation": "num",
+            "value": "$polygon.[0].segments.[1].length"
+          },
+          "value2": {
+            "operation": "squareRoot",
+            "value": {
+              "operation": "diff",
+              "value1": {
+                "operation": "sum",
+                "value1": {
+                  "operation": "squared",
+                  "value": {
+                    "operation": "num",
+                    "value": "$polygon.[0].segments.[0].length"
+                  }
+                },
+                "value2": {
+                  "operation": "squared",
+                  "value": {
+                    "operation": "num",
+                    "value": "$polygon.[0].segments.[2].length"
+                  }
+                }
+              },
+              "value2": {
+                "operation": "times",
+                "value1": {
+                  "operation": "exactNum",
+                  "value": "2"
+                },
+                "value2": {
+                  "operation": "times",
+                  "value1": {
+                    "operation": "num",
+                    "value": "$polygon.[0].segments.[0].length"
+                  },
+                  "value2": {
+                    "operation": "times",
+                    "value1": {
+                      "operation": "num",
+                      "value": "$polygon.[0].segments.[2].length"
+                    },
+                    "value2": {
+                      "operation": "cosine",
+                      "value": {
+                        "operation": "num",
+                        "value": "$polygon.[0].angles.[2].degrees"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "operation": "math",
+        "id": 4,
+        "dependents": ["$polygon.[0].segments.[2]"],
+        "dependencies": ["$polygon.[0].segments.[1]", "$polygon.[0].segments.[0]", "$polygon.[0].angles.[0]"],
+        "math": {
+          "operation": "equals",
+          "value1": {
+            "operation": "num",
+            "value": "$polygon.[0].segments.[2].length"
+          },
+          "value2": {
+            "operation": "squareRoot",
+            "value": {
+              "operation": "diff",
+              "value1": {
+                "operation": "sum",
+                "value1": {
+                  "operation": "squared",
+                  "value": {
+                    "operation": "num",
+                    "value": "$polygon.[0].segments.[0].length"
+                  }
+                },
+                "value2": {
+                  "operation": "squared",
+                  "value": {
+                    "operation": "num",
+                    "value": "$polygon.[0].segments.[1].length"
+                  }
+                }
+              },
+              "value2": {
+                "operation": "times",
+                "value1": {
+                  "operation": "exactNum",
+                  "value": "2"
+                },
+                "value2": {
+                  "operation": "times",
+                  "value1": {
+                    "operation": "num",
+                    "value": "$polygon.[0].segments.[0].length"
+                  },
+                  "value2": {
+                    "operation": "times",
+                    "value1": {
+                      "operation": "num",
+                      "value": "$polygon.[0].segments.[1].length"
+                    },
+                    "value2": {
+                      "operation": "cosine",
+                      "value": {
+                        "operation": "num",
+                        "value": "$polygon.[0].angles.[0].degrees"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ],
+    "literalInfo": [
+      [
+        "'△'",
+        "$polygon.[0].dots.[0].letter",
+        "$polygon.[0].dots.[1].letter",
+        "$polygon.[0].dots.[2].letter"
+      ]
+    ]
+  },
+  "rightTriangle": {
+    "properties": {
+      "triangle": {
+        "..obj": "triangle",
+        "..required": true,
+        "..sameForAllEntries": true
+      },
+      "rightAngle": {
+        "..obj": "angle",
+        "..required": false,
+        "..sameForAllEntries": true
+      },
+      "legs": {
+        "..obj": "list",
+        "type": "segment",
+        "..required": false
+      },
+      "hypotenuse": {
+        "..obj": "segment",
+        "..required": false,
+        "..sameForAllEntries": true
+      }
+    },
+    "checks": [
+      {
+        "operation": "_rightTriangle"
+      }
+    ],
+    "parse": [
+      {
+        "operation": "_rightTriangle"
+      }
+    ],
+    "consequences": [
+      {
+        "operation": "_angle30",
+        "id": -1
+      }
+    ]
+  }
+}

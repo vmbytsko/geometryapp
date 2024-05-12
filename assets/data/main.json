@@ -1,0 +1,681 @@
+{
+  "..appversion": 1,
+  "..dbversion": 1,
+  "dot": {
+    "properties": {
+      "letter": {
+        "..obj": "char",
+        "..required": true,
+        "..sameForAllEntries": true
+      }
+    },
+    "parse": [
+      {
+        "operation": "set",
+        "key": "$letter",
+        "value": "#0#"
+      }
+    ],
+    "checks": [
+      {
+        "operation": "full"
+      }
+    ],
+    "literalInfo": [
+      [
+        "$letter",
+        "' — точка'"
+      ]
+    ]
+  },
+  "line": {
+    "properties": {
+      "dots": {
+        "..obj": "list",
+        "type": "dot",
+        "..required": true
+      },
+      "excludedDots": {
+        "..obj": "list",
+        "type": "dot",
+        "..required": false
+      },
+      "letter": {
+        "..obj": "char",
+        "..required": false,
+        "..sameForAllEntries": true
+      }
+    },
+    "parse": [
+      {
+        "operation": "set",
+        "key": "$letter",
+        "value": "#2#"
+      },
+      {
+        "operation": "append",
+        "list": "$dots",
+        "value": "dot(#0#)"
+      },
+      {
+        "operation": "append",
+        "list": "$dots",
+        "value": "dot(#1#)"
+      }
+    ],
+    "problemUI": [
+      {
+        "ui": [
+          "$a:letter",
+          "$b:letter",
+          "' — прямая'"
+        ],
+        "parse": [
+          "$a",
+          "$b",
+          "'=line'"
+        ]
+      }
+    ],
+    "checks": [
+      {
+        "operation": "_line"
+      },
+      {
+        "operation": "listProperties",
+        "list": "$dots",
+        "moreThan": 1
+      }
+    ],
+    "literalInfo": [
+      [
+        "$letter",
+        "' — прямая'"
+      ],
+      [
+        "$dots.[0].letter",
+        "$dots.[1].letter",
+        "' — прямая'"
+      ]
+    ]
+  },
+  "dotInLine": {
+    "parse": [
+      {
+        "operation": "append",
+        "list": "line(#1,2#).dots",
+        "value": "dot(#0#)",
+        "between": "dot(#1#);dot(#2#)"
+      }
+    ],
+    "problemUI": [
+      {
+        "ui": [
+          "'точка '",
+          "$a:letter",
+          "'∈ '",
+          "$b:letter",
+          "$c:letter"
+        ],
+        "parse": [
+          "$a",
+          "$b",
+          "$c",
+          "'=dotInLine'"
+        ]
+      }
+    ],
+    "literalInfo": [
+      [
+        "'#0#∈ #1,2#'"
+      ]
+    ]
+  },
+  "dotNotInLine": {
+    "parse": [
+      {
+        "operation": "append",
+        "list": "line(#1,2#).excludedDots",
+        "value": "dot(#0#)"
+      }
+    ],
+    "problemUI": [
+      {
+        "ui": [
+          "'точка '",
+          "$a:letter",
+          "'∉ '",
+          "$b:letter",
+          "$c:letter"
+        ],
+        "parse": [
+          "$a",
+          "$b",
+          "$c",
+          "'=dotNotInLine'"
+        ]
+      }
+    ],
+    "literalInfo": [
+      [
+        "'#0#∉ #1,2#'"
+      ]
+    ]
+  },
+  "intersection": {
+    "properties": {
+      "line1": {
+        "..obj": "line",
+        "..required": true
+      },
+      "line2": {
+        "..obj": "line",
+        "..required": true
+      },
+      "dot": {
+        "..obj": "dot",
+        "..required": true,
+        "..sameForAllEntries": true
+      }
+    },
+    "parse": [
+      {
+        "operation": "set",
+        "key": "$line1",
+        "value": "line(#0-1#)"
+      },
+      {
+        "operation": "set",
+        "key": "$line2",
+        "value": "line(#2-3#)"
+      },
+      {
+        "operation": "set",
+        "key": "$dot",
+        "value": "dot(#4#)"
+      },
+      {
+        "operation": "append",
+        "list": "line(#0-1#).dots",
+        "value": "dot(#4#)",
+        "between": "dot(#0#);dot(#1#)"
+      },
+      {
+        "operation": "append",
+        "list": "line(#2-3#).dots",
+        "value": "dot(#4#)",
+        "between": "dot(#2#);dot(#3#)"
+      }
+    ],
+    "checks": [
+      {
+        "operation": "listProperties",
+        "list": "$line1._listDots",
+        "containsOne": "$line2._listDots"
+      },
+      {
+        "operation": "listProperties",
+        "list": "$line2._listDots",
+        "containsOne": "$line1._listDots"
+      },
+      {
+        "operation": "listProperties",
+        "list": "$line1._listDots",
+        "contains": [
+          "$dot"
+        ]
+      },
+      {
+        "operation": "listProperties",
+        "list": "$line2._listDots",
+        "contains": [
+          "$dot"
+        ]
+      },
+      {
+        "operation": "notEqual",
+        "values": [
+          "$line1",
+          "$line2"
+        ]
+      },
+      {
+        "operation": "changePlaces",
+        "values": [
+          "$line1",
+          "$line2"
+        ]
+      }
+    ],
+    "consequences": [
+      {
+        "id": -1,
+        "operation": "_intersection"
+      }
+    ],
+    "problemUI": [
+      {
+        "ui": [
+          "$a:letter",
+          "$b:letter",
+          "'∩ '",
+          "$c:letter",
+          "$d:letter",
+          "' = '",
+          "$e:letter"
+        ],
+        "parse": [
+          "$a",
+          "$b",
+          "$c",
+          "$d",
+          "$e",
+          "'=intersection'"
+        ]
+      }
+    ]
+  },
+  "perpendiculars": {
+    "properties": {
+      "intersection": {
+        "..obj": "intersection",
+        "..required": true,
+        "..sameForAllEntries": true
+      }
+    },
+    "parse": [
+      {
+        "operation": "set",
+        "key": "$intersection",
+        "value": "intersection(#0-4#)"
+      }
+    ],
+    "checks": [
+      {
+        "operation": "onlyByParserOrConsequence"
+      }
+    ],
+    "problemUI": [
+      {
+        "ui": [
+          "$a:letter",
+          "$b:letter",
+          "'⟂ '",
+          "$c:letter",
+          "$d:letter",
+          "' = '",
+          "$e:letter"
+        ],
+        "parse": [
+          "$a",
+          "$b",
+          "$c",
+          "$d",
+          "$e",
+          "'=perpendiculars'"
+        ]
+      }
+    ],
+    "literalInfo": [
+      [
+        "'#0,1# ⟂ #2,3#'"
+      ]
+    ],
+    "consequences": [
+      {
+        "id": -1,
+        "operation": "_perpendicular"
+      }
+    ]
+  },
+  "ray": {
+    "properties": {
+      "baseline": {
+        "..obj": "line",
+        "..required": true,
+        "..sameForAllEntries": true
+      },
+      "startDot": {
+        "..obj": "dot",
+        "..required": true
+      },
+      "continueDot": {
+        "..obj": "dot",
+        "..required": true
+      }
+    },
+    "parse": [
+      {
+        "operation": "set",
+        "key": "$startDot",
+        "value": "dot(#0#)"
+      },
+      {
+        "operation": "set",
+        "key": "$continueDot",
+        "value": "dot(#1#)"
+      },
+      {
+        "operation": "set",
+        "key": "$baseline",
+        "value": "line(#0,1#)"
+      }
+    ],
+    "problemUI": [
+      {
+        "ui": [
+          "$a:letter",
+          "$b:letter",
+          "' — луч'"
+        ],
+        "parse": [
+          "$a",
+          "$b",
+          "'=ray'"
+        ]
+      }
+    ],
+    "checks": [
+      {
+        "operation": "_ray"
+      }
+    ],
+    "literalInfo": [
+      [
+        "$startDot.letter",
+        "$continueDot.letter",
+        "' — луч'"
+      ]
+    ]
+  },
+  "segment": {
+    "properties": {
+      "baseline": {
+        "..obj": "line",
+        "..required": true,
+        "..sameForAllEntries": true
+      },
+      "dot1": {
+        "..obj": "dot",
+        "..required": true
+      },
+      "dot2": {
+        "..obj": "dot",
+        "..required": true
+      },
+      "length": {
+        "..obj": "float",
+        "..required": false,
+        "..sameForAllEntries": true
+      }
+    },
+    "parse": [
+      {
+        "operation": "set",
+        "key": "$baseline",
+        "value": "line(#0,1#)"
+      },
+      {
+        "operation": "set",
+        "key": "$dot1",
+        "value": "dot(#0#)"
+      },
+      {
+        "operation": "set",
+        "key": "$dot2",
+        "value": "dot(#1#)"
+      },
+      {
+        "operation": "set",
+        "key": "$length",
+        "value": "#2-*#"
+      }
+    ],
+    "problemUI": [
+      {
+        "ui": [
+          "$a:letter",
+          "$b:letter",
+          "' — отрезок'"
+        ],
+        "parse": [
+          "$a",
+          "$b",
+          "'=segment'"
+        ]
+      },
+      {
+        "ui": [
+          "'отрезок '",
+          "$a:letter",
+          "$b:letter",
+          "' = '",
+          "$c:double"
+        ],
+        "parse": [
+          "$a",
+          "$b",
+          "$c",
+          "'=segment'"
+        ]
+      }
+    ],
+    "findUI": [
+      {
+        "ui": [
+          "'отрезок '",
+          "$a:letter",
+          "$b:letter",
+          "' = ?'"
+        ],
+        "parse": [
+          "$a",
+          "$b",
+          "'=segment.toFind'"
+        ]
+      }
+    ],
+    "answerUI": [
+      "'отрезок '",
+      "$dot1.letter",
+      "$dot2.letter",
+      "' = '",
+      "$length"
+    ],
+    "checks": [
+      {
+        "operation": "changePlaces",
+        "values": [
+          "$dot1",
+          "$dot2"
+        ]
+      },
+      {
+        "operation": "listProperties",
+        "list": "$baseline._listDots",
+        "contains": [
+          "$dot1",
+          "$dot2"
+        ]
+      },
+      {
+        "operation": "notEqual",
+        "values": [
+          "$dot1",
+          "$dot2"
+        ]
+      }
+    ],
+    "literalInfo": [
+      [
+        "$dot1.letter",
+        "$dot2.letter",
+        "' — отрезок'"
+      ]
+    ]
+  },
+  "angle": {
+    "properties": {
+      "ray1": {
+        "..obj": "ray",
+        "..required": true
+      },
+      "ray2": {
+        "..obj": "ray",
+        "..required": true
+      },
+      "degrees": {
+        "..obj": "float",
+        "..required": false,
+        "..sameForAllEntries": true
+      }
+    },
+    "parse": [
+      {
+        "operation": "set",
+        "key": "$ray1",
+        "value": "ray(#1,0#)"
+      },
+      {
+        "operation": "set",
+        "key": "$ray2",
+        "value": "ray(#1,2#)"
+      },
+      {
+        "operation": "set",
+        "key": "$degrees",
+        "value": "#3-*#"
+      }
+    ],
+    "problemUI": [
+      {
+        "ui": [
+          "'∠'",
+          "$a:letter",
+          "$b:letter",
+          "$c:letter",
+          "' = '",
+          "$d:double",
+          "'°'"
+        ],
+        "parse": [
+          "$a",
+          "$b",
+          "$c",
+          "$d",
+          "'=angle'"
+        ]
+      }
+    ],
+    "findUI": [
+      {
+        "ui": [
+          "'∠'",
+          "$a:letter",
+          "$b:letter",
+          "$c:letter",
+          "' = ?'"
+        ],
+        "parse": [
+          "$a",
+          "$b",
+          "$c",
+          "'=angle.toFind'"
+        ]
+      }
+    ],
+    "answerUI": [
+      "'∠'",
+      "$ray1.continueDot.letter",
+      "$ray1.startDot.letter",
+      "$ray2.continueDot.letter",
+      "' = '",
+      "$degrees",
+      "'°'"
+    ],
+    "checks": [
+      {
+        "operation": "changePlaces",
+        "values": [
+          "$ray1",
+          "$ray2"
+        ]
+      },
+      {
+        "operation": "equal",
+        "values": [
+          "$ray1.[0].startDot",
+          "$ray2.[0].startDot"
+        ]
+      },
+      {
+        "operation": "notEqual",
+        "values": [
+          "$ray1",
+          "$ray2"
+        ]
+      },
+      {
+        "operation": "notEqual",
+        "values": [
+          "$ray1.baseline",
+          "$ray2.baseline"
+        ]
+      }
+    ],
+    "literalInfo": [
+      [
+        "'∠'",
+        "$ray1.continueDot.letter",
+        "$ray1.startDot.letter",
+        "$ray2.continueDot.letter"
+      ]
+    ]
+  },
+  "polygon": {
+    "properties": {
+      "dots": {
+        "..obj": "list",
+        "type": "dot",
+        "..required": true
+      },
+      "angles": {
+        "..obj": "list",
+        "type": "angle",
+        "..required": false
+      },
+      "segments": {
+        "..obj": "list",
+        "type": "segment",
+        "..required": false
+      }
+    },
+    "parse": [
+      {
+        "operation": "_polygon"
+      }
+    ],
+    "problemUI": [
+      {
+        "ui": [
+          "$a:string",
+          "' — многоугольник'"
+        ],
+        "parse": [
+          "$a",
+          "'=polygon'"
+        ]
+      }
+    ],
+    "checks": [
+      {
+        "operation": "_polygon"
+      }
+    ],
+    "literalInfo": [
+      [
+        "'polygon???? — многоугольник'"
+      ]
+    ]
+  }
+}

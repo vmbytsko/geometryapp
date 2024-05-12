@@ -1,0 +1,77 @@
+           "heightOfTriangle": {
+               "properties": {
+                 "triangle": {
+                   "..obj": "triangle",
+                   "..required": true
+                 },
+                 "height": {
+                   "..obj": "segment",
+                   "..required": true
+                 },
+                 "base": {
+                   "..obj": "segment",
+                   "..required": true
+                 }
+               },
+               "parse": [
+                 {
+                   "operation": "set",
+                   "key": "$triangle",
+                   "value": "#0-2#"
+                 },
+                 {
+                   "operation": "set",
+                   "key": "$height",
+                   "value": "#3,4#"
+                 },
+                 {
+                   "operation": "set",
+                   "key": "$base",
+                   "value": "#5,6#"
+                 }
+               ],
+               "checks": [
+                 {
+                   "operation": "onlyByParser"
+                 }
+               ],
+               "consequences": [
+                 {
+                   "operation": "addStringObject",
+                   "id": "3",
+                   "stringObject": [
+                     "'perpendiculars('",
+                     "$height.dot1",
+                     "$height.dot2",
+                     "$base.dot1",
+                     "$base.dot2",
+                     "')'"
+                   ]
+                 }
+               ],
+               "problemUI": [
+                 {
+                   "ui": [
+                     "$a:letter",
+                     "$b:letter",
+                     "' - высота △'",
+                     "$c:letter",
+                     "$d:letter",
+                     "$e:letter",
+                     "' к стороне '",
+                     "$f:letter",
+                     "$g:letter"
+                   ],
+                   "parse": [
+                     "$c",
+                     "$d",
+                     "$e",
+                     "$a",
+                     "$b",
+                     "$f",
+                     "$g",
+                     "'=heightOfTriangle'"
+                   ]
+                 }
+               ]
+             }
